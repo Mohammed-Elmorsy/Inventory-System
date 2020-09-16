@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="697179bc52ff4fbf8c2eb6fde80dbf25" Name="Diagram1">
+        <EntityTypeShape EntityType="Model.Customer" Width="1.5" PointX="0.75" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Item" Width="1.5" PointX="3" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Recieving_Permission" Width="1.5" PointX="5.25" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Store" Width="1.5" PointX="6" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Store_Item" Width="1.5" PointX="8.25" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.sysdiagram" Width="1.5" PointX="2.75" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Unit" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Vendor" Width="1.5" PointX="0.75" PointY="3.125" IsExpanded="true" />
+        <AssociationConnector Association="Model.FK_Item_Unit" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Item_Vendor" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Recieving_Permission_Item" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Store_Item_Item" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Recieving_Permission_Vendor" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Store_Item_Store" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,542 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="customer_id" />
+          </Key>
+          <Property Name="customer_id" Type="int" Nullable="false" />
+          <Property Name="customer_name" Type="varchar" MaxLength="50" />
+          <Property Name="telephone_number" Type="int" />
+          <Property Name="fax" Type="varchar" MaxLength="50" />
+          <Property Name="email" Type="varchar" MaxLength="50" />
+          <Property Name="phone_number" Type="int" />
+          <Property Name="website" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Inventory Management.dbo.Issuing_Permission' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Issuing_Permission">
+          <Property Name="ip_no" Type="int" />
+          <Property Name="ip_date" Type="date" />
+          <Property Name="ip_items_quantity" Type="int" />
+          <Property Name="item_prod_date" Type="date" />
+          <Property Name="item_exp_date" Type="date" />
+          <Property Name="customer_id" Type="int" />
+          <Property Name="item_id" Type="int" />
+        </EntityType>-->
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="item_id" />
+          </Key>
+          <Property Name="item_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="item_name" Type="varchar" MaxLength="50" />
+          <Property Name="item_code" Type="varchar" MaxLength="50" />
+          <Property Name="description" Type="varchar" MaxLength="50" />
+          <Property Name="vendor_id" Type="int" />
+          <Property Name="unit_id" Type="int" />
+        </EntityType>
+        <EntityType Name="Recieving_Permission">
+          <Key>
+            <PropertyRef Name="rp_no" />
+          </Key>
+          <Property Name="rp_no" Type="int" Nullable="false" />
+          <Property Name="rp_date" Type="date" />
+          <Property Name="rp_items_quantity" Type="int" />
+          <Property Name="item_prod_date" Type="date" />
+          <Property Name="item_exp_date" Type="date" />
+          <Property Name="vendor_id" Type="int" />
+          <Property Name="item_id" Type="int" />
+        </EntityType>
+        <EntityType Name="Store">
+          <Key>
+            <PropertyRef Name="store_id" />
+          </Key>
+          <Property Name="store_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="store_name" Type="varchar" MaxLength="50" />
+          <Property Name="store_address" Type="varchar" MaxLength="50" />
+          <Property Name="manager_id" Type="int" />
+          <Property Name="manager_name" Type="varchar" MaxLength="50" />
+          <Property Name="manager_address" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Store_Item">
+          <Key>
+            <PropertyRef Name="store_id" />
+            <PropertyRef Name="item_id" />
+          </Key>
+          <Property Name="store_id" Type="int" Nullable="false" />
+          <Property Name="item_id" Type="int" Nullable="false" />
+          <Property Name="quantity" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Unit">
+          <Key>
+            <PropertyRef Name="unit_id" />
+          </Key>
+          <Property Name="unit_id" Type="int" Nullable="false" />
+          <Property Name="unit_description" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Vendor">
+          <Key>
+            <PropertyRef Name="vendor_id" />
+          </Key>
+          <Property Name="vendor_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="vendor_name" Type="varchar" MaxLength="50" />
+          <Property Name="telephone_number" Type="int" />
+          <Property Name="fax" Type="varchar" MaxLength="50" />
+          <Property Name="email" Type="varchar" MaxLength="50" />
+          <Property Name="phone_number" Type="int" />
+          <Property Name="website" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+error 6004: The table 'Inventory Management.dbo.Issuing_Permission' is referenced by a relationship, but cannot be found.
+        <Association Name="FK_Issuing_Permission_Customer" />-->
+        <!--Errors Found During Generation:
+error 6004: The table 'Inventory Management.dbo.Issuing_Permission' is referenced by a relationship, but cannot be found.
+        <Association Name="FK_Issuing_Permission_Item" />-->
+        <Association Name="FK_Item_Unit">
+          <End Role="Unit" Type="Self.Unit" Multiplicity="0..1" />
+          <End Role="Item" Type="Self.Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Unit">
+              <PropertyRef Name="unit_id" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="unit_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Item_Vendor">
+          <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1" />
+          <End Role="Item" Type="Self.Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendor">
+              <PropertyRef Name="vendor_id" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="vendor_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Recieving_Permission_Item">
+          <End Role="Item" Type="Self.Item" Multiplicity="0..1" />
+          <End Role="Recieving_Permission" Type="Self.Recieving_Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="item_id" />
+            </Principal>
+            <Dependent Role="Recieving_Permission">
+              <PropertyRef Name="item_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Recieving_Permission_Vendor">
+          <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1" />
+          <End Role="Recieving_Permission" Type="Self.Recieving_Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendor">
+              <PropertyRef Name="vendor_id" />
+            </Principal>
+            <Dependent Role="Recieving_Permission">
+              <PropertyRef Name="vendor_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Store_Item_Item">
+          <End Role="Item" Type="Self.Item" Multiplicity="1" />
+          <End Role="Store_Item" Type="Self.Store_Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="item_id" />
+            </Principal>
+            <Dependent Role="Store_Item">
+              <PropertyRef Name="item_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Store_Item_Store">
+          <End Role="Store" Type="Self.Store" Multiplicity="1" />
+          <End Role="Store_Item" Type="Self.Store_Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Store">
+              <PropertyRef Name="store_id" />
+            </Principal>
+            <Dependent Role="Store_Item">
+              <PropertyRef Name="store_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Recieving_Permission" EntityType="Self.Recieving_Permission" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Store" EntityType="Self.Store" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Store_Item" EntityType="Self.Store_Item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Unit" EntityType="Self.Unit" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vendor" EntityType="Self.Vendor" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Item_Unit" Association="Self.FK_Item_Unit">
+            <End Role="Unit" EntitySet="Unit" />
+            <End Role="Item" EntitySet="Item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Item_Vendor" Association="Self.FK_Item_Vendor">
+            <End Role="Vendor" EntitySet="Vendor" />
+            <End Role="Item" EntitySet="Item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Recieving_Permission_Item" Association="Self.FK_Recieving_Permission_Item">
+            <End Role="Item" EntitySet="Item" />
+            <End Role="Recieving_Permission" EntitySet="Recieving_Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Recieving_Permission_Vendor" Association="Self.FK_Recieving_Permission_Vendor">
+            <End Role="Vendor" EntitySet="Vendor" />
+            <End Role="Recieving_Permission" EntitySet="Recieving_Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Store_Item_Item" Association="Self.FK_Store_Item_Item">
+            <End Role="Item" EntitySet="Item" />
+            <End Role="Store_Item" EntitySet="Store_Item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Store_Item_Store" Association="Self.FK_Store_Item_Store">
+            <End Role="Store" EntitySet="Store" />
+            <End Role="Store_Item" EntitySet="Store_Item" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="customer_id" />
+          </Key>
+          <Property Name="customer_id" Type="Int32" Nullable="false" />
+          <Property Name="customer_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="telephone_number" Type="Int32" />
+          <Property Name="fax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="phone_number" Type="Int32" />
+          <Property Name="website" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="item_id" />
+          </Key>
+          <Property Name="item_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="item_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="item_code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="vendor_id" Type="Int32" />
+          <Property Name="unit_id" Type="Int32" />
+          <NavigationProperty Name="Unit" Relationship="Self.FK_Item_Unit" FromRole="Item" ToRole="Unit" />
+          <NavigationProperty Name="Vendor" Relationship="Self.FK_Item_Vendor" FromRole="Item" ToRole="Vendor" />
+          <NavigationProperty Name="Recieving_Permission" Relationship="Self.FK_Recieving_Permission_Item" FromRole="Item" ToRole="Recieving_Permission" />
+          <NavigationProperty Name="Store_Item" Relationship="Self.FK_Store_Item_Item" FromRole="Item" ToRole="Store_Item" />
+        </EntityType>
+        <EntityType Name="Recieving_Permission">
+          <Key>
+            <PropertyRef Name="rp_no" />
+          </Key>
+          <Property Name="rp_no" Type="Int32" Nullable="false" />
+          <Property Name="rp_date" Type="DateTime" Precision="0" />
+          <Property Name="rp_items_quantity" Type="Int32" />
+          <Property Name="item_prod_date" Type="DateTime" Precision="0" />
+          <Property Name="item_exp_date" Type="DateTime" Precision="0" />
+          <Property Name="vendor_id" Type="Int32" />
+          <Property Name="item_id" Type="Int32" />
+          <NavigationProperty Name="Item" Relationship="Self.FK_Recieving_Permission_Item" FromRole="Recieving_Permission" ToRole="Item" />
+          <NavigationProperty Name="Vendor" Relationship="Self.FK_Recieving_Permission_Vendor" FromRole="Recieving_Permission" ToRole="Vendor" />
+        </EntityType>
+        <EntityType Name="Store">
+          <Key>
+            <PropertyRef Name="store_id" />
+          </Key>
+          <Property Name="store_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="store_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="store_address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="manager_id" Type="Int32" />
+          <Property Name="manager_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="manager_address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Store_Item" Relationship="Self.FK_Store_Item_Store" FromRole="Store" ToRole="Store_Item" />
+        </EntityType>
+        <EntityType Name="Store_Item">
+          <Key>
+            <PropertyRef Name="store_id" />
+            <PropertyRef Name="item_id" />
+          </Key>
+          <Property Name="store_id" Type="Int32" Nullable="false" />
+          <Property Name="item_id" Type="Int32" Nullable="false" />
+          <Property Name="quantity" Type="Int32" />
+          <NavigationProperty Name="Item" Relationship="Self.FK_Store_Item_Item" FromRole="Store_Item" ToRole="Item" />
+          <NavigationProperty Name="Store" Relationship="Self.FK_Store_Item_Store" FromRole="Store_Item" ToRole="Store" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Unit">
+          <Key>
+            <PropertyRef Name="unit_id" />
+          </Key>
+          <Property Name="unit_id" Type="Int32" Nullable="false" />
+          <Property Name="unit_description" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Items" Relationship="Self.FK_Item_Unit" FromRole="Unit" ToRole="Item" />
+        </EntityType>
+        <EntityType Name="Vendor">
+          <Key>
+            <PropertyRef Name="vendor_id" />
+          </Key>
+          <Property Name="vendor_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="vendor_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="telephone_number" Type="Int32" />
+          <Property Name="fax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="phone_number" Type="Int32" />
+          <Property Name="website" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Items" Relationship="Self.FK_Item_Vendor" FromRole="Vendor" ToRole="Item" />
+          <NavigationProperty Name="Recieving_Permission" Relationship="Self.FK_Recieving_Permission_Vendor" FromRole="Vendor" ToRole="Recieving_Permission" />
+        </EntityType>
+        <Association Name="FK_Item_Unit">
+          <End Role="Unit" Type="Self.Unit" Multiplicity="0..1" />
+          <End Role="Item" Type="Self.Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Unit">
+              <PropertyRef Name="unit_id" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="unit_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Item_Vendor">
+          <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1" />
+          <End Role="Item" Type="Self.Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendor">
+              <PropertyRef Name="vendor_id" />
+            </Principal>
+            <Dependent Role="Item">
+              <PropertyRef Name="vendor_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Recieving_Permission_Item">
+          <End Role="Item" Type="Self.Item" Multiplicity="0..1" />
+          <End Role="Recieving_Permission" Type="Self.Recieving_Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="item_id" />
+            </Principal>
+            <Dependent Role="Recieving_Permission">
+              <PropertyRef Name="item_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Store_Item_Item">
+          <End Role="Item" Type="Self.Item" Multiplicity="1" />
+          <End Role="Store_Item" Type="Self.Store_Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="item_id" />
+            </Principal>
+            <Dependent Role="Store_Item">
+              <PropertyRef Name="item_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Recieving_Permission_Vendor">
+          <End Role="Vendor" Type="Self.Vendor" Multiplicity="0..1" />
+          <End Role="Recieving_Permission" Type="Self.Recieving_Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vendor">
+              <PropertyRef Name="vendor_id" />
+            </Principal>
+            <Dependent Role="Recieving_Permission">
+              <PropertyRef Name="vendor_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Store_Item_Store">
+          <End Role="Store" Type="Self.Store" Multiplicity="1" />
+          <End Role="Store_Item" Type="Self.Store_Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Store">
+              <PropertyRef Name="store_id" />
+            </Principal>
+            <Dependent Role="Store_Item">
+              <PropertyRef Name="store_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Inventory_Management_Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="Items" EntityType="Self.Item" />
+          <EntitySet Name="Recieving_Permission" EntityType="Self.Recieving_Permission" />
+          <EntitySet Name="Stores" EntityType="Self.Store" />
+          <EntitySet Name="Store_Item" EntityType="Self.Store_Item" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="Units" EntityType="Self.Unit" />
+          <EntitySet Name="Vendors" EntityType="Self.Vendor" />
+          <AssociationSet Name="FK_Item_Unit" Association="Self.FK_Item_Unit">
+            <End Role="Unit" EntitySet="Units" />
+            <End Role="Item" EntitySet="Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Item_Vendor" Association="Self.FK_Item_Vendor">
+            <End Role="Vendor" EntitySet="Vendors" />
+            <End Role="Item" EntitySet="Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Recieving_Permission_Item" Association="Self.FK_Recieving_Permission_Item">
+            <End Role="Item" EntitySet="Items" />
+            <End Role="Recieving_Permission" EntitySet="Recieving_Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Store_Item_Item" Association="Self.FK_Store_Item_Item">
+            <End Role="Item" EntitySet="Items" />
+            <End Role="Store_Item" EntitySet="Store_Item" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Recieving_Permission_Vendor" Association="Self.FK_Recieving_Permission_Vendor">
+            <End Role="Vendor" EntitySet="Vendors" />
+            <End Role="Recieving_Permission" EntitySet="Recieving_Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Store_Item_Store" Association="Self.FK_Store_Item_Store">
+            <End Role="Store" EntitySet="Stores" />
+            <End Role="Store_Item" EntitySet="Store_Item" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Inventory_Management_Entities">
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="Model.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+                <ScalarProperty Name="customer_name" ColumnName="customer_name" />
+                <ScalarProperty Name="telephone_number" ColumnName="telephone_number" />
+                <ScalarProperty Name="fax" ColumnName="fax" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="phone_number" ColumnName="phone_number" />
+                <ScalarProperty Name="website" ColumnName="website" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Items">
+            <EntityTypeMapping TypeName="Model.Item">
+              <MappingFragment StoreEntitySet="Item">
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="item_name" ColumnName="item_name" />
+                <ScalarProperty Name="item_code" ColumnName="item_code" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="vendor_id" ColumnName="vendor_id" />
+                <ScalarProperty Name="unit_id" ColumnName="unit_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Recieving_Permission">
+            <EntityTypeMapping TypeName="Model.Recieving_Permission">
+              <MappingFragment StoreEntitySet="Recieving_Permission">
+                <ScalarProperty Name="rp_no" ColumnName="rp_no" />
+                <ScalarProperty Name="rp_date" ColumnName="rp_date" />
+                <ScalarProperty Name="rp_items_quantity" ColumnName="rp_items_quantity" />
+                <ScalarProperty Name="item_prod_date" ColumnName="item_prod_date" />
+                <ScalarProperty Name="item_exp_date" ColumnName="item_exp_date" />
+                <ScalarProperty Name="vendor_id" ColumnName="vendor_id" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stores">
+            <EntityTypeMapping TypeName="Model.Store">
+              <MappingFragment StoreEntitySet="Store">
+                <ScalarProperty Name="store_id" ColumnName="store_id" />
+                <ScalarProperty Name="store_name" ColumnName="store_name" />
+                <ScalarProperty Name="store_address" ColumnName="store_address" />
+                <ScalarProperty Name="manager_id" ColumnName="manager_id" />
+                <ScalarProperty Name="manager_name" ColumnName="manager_name" />
+                <ScalarProperty Name="manager_address" ColumnName="manager_address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Store_Item">
+            <EntityTypeMapping TypeName="Model.Store_Item">
+              <MappingFragment StoreEntitySet="Store_Item">
+                <ScalarProperty Name="store_id" ColumnName="store_id" />
+                <ScalarProperty Name="item_id" ColumnName="item_id" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Model.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Units">
+            <EntityTypeMapping TypeName="Model.Unit">
+              <MappingFragment StoreEntitySet="Unit">
+                <ScalarProperty Name="unit_id" ColumnName="unit_id" />
+                <ScalarProperty Name="unit_description" ColumnName="unit_description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vendors">
+            <EntityTypeMapping TypeName="Model.Vendor">
+              <MappingFragment StoreEntitySet="Vendor">
+                <ScalarProperty Name="vendor_id" ColumnName="vendor_id" />
+                <ScalarProperty Name="vendor_name" ColumnName="vendor_name" />
+                <ScalarProperty Name="telephone_number" ColumnName="telephone_number" />
+                <ScalarProperty Name="fax" ColumnName="fax" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="phone_number" ColumnName="phone_number" />
+                <ScalarProperty Name="website" ColumnName="website" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
